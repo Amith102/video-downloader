@@ -1,6 +1,6 @@
 // @ts-ignore
 import { instagramGetUrl } from "instagram-url-direct";
-import ytdl from "@ybd-project/ytdl-core";
+import ytdl from "@distube/ytdl-core";
 import { getFbVideoInfo } from "fb-downloader-scrapper";
 import { VideoData } from "@/lib/types";
 
@@ -36,17 +36,19 @@ export const getInstagramVideo = async (url: string): Promise<VideoData> => {
 };
 
 export const getYoutubeVideo = async (url: string): Promise<VideoData> => {
-    // ... existing ytdl implementation ...
     try {
-        const info = await (ytdl as any).getInfo(url);
-        const format = (ytdl as any).chooseFormat(info.formats, { quality: 'highestvideo', filter: 'videoandaudio' });
-        const audioFormat = (ytdl as any).chooseFormat(info.formats, { quality: 'highestaudio', filter: 'audioonly' });
+        if (!ytdl.validateURL(url)) {
+            throw new Error("Invalid YouTube URL");
+        }
+
+        const info = await ytdl.getInfo(url);
+        const format = ytdl.chooseFormat(info.formats, { quality: 'highestvideo', filter: 'videoandaudio' });
+        const audioFormat = ytdl.chooseFormat(info.formats, { quality: 'highestaudio', filter: 'audioonly' });
 
         return {
             platform: "youtube",
             title: info.videoDetails.title,
             thumbnail: info.videoDetails.thumbnails[0].url,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             videoUrl: format.url,
             audioUrl: audioFormat ? audioFormat.url : undefined,
             author: info.videoDetails.author.name
