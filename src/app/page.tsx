@@ -54,7 +54,7 @@ export default function Home() {
           <img
             src="/signature.png"
             alt="Signature"
-            className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity dark:brightness-200 dark:contrast-200 py-1"
+            className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity mix-blend-multiply dark:mix-blend-screen dark:invert py-1"
           />
         </div>
       </footer>
